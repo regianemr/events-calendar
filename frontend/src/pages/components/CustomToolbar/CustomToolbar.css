@@ -1,0 +1,60 @@
+/* TOOLBAR */
+.toolbar-container {
+  display: flex;
+  height: 10vh;
+  align-items: center;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.mesAno{
+  width: 50%;
+  color: #f3f3f3;
+  justify-content: flex-start;
+}
+
+.toolbar-navegation {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  
+  .mesAno {
+    font-size: 1.5rem;
+  }
+
+  .toolbar-container {
+    flex-direction: column;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 5px 15px;
+  }
+
+  .dirtop {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .toolbar-navegation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* Ajustes para telas muito pequenas (celulares) */
+@media (max-width: 480px) {
+  .mesAno {
+    font-size: 1.2rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+}
