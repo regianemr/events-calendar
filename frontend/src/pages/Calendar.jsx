@@ -68,7 +68,12 @@ function MyCalendar() {
   useEffect(() => {
     eventService.list()
       .then((response) => {
-        setEvents(response.data)
+        const parsedEvents = [ ...response.data ];
+        parsedEvents.map(parsed => {
+          parsed.start = moment(parsed.start).toDate()
+          parsed.end = moment(parsed.end).toDate()
+        })
+        setEvents(parsedEvents)
       })
       .catch((error) => {
         console.log("Erro na requisição:", error)
@@ -79,7 +84,7 @@ function MyCalendar() {
     <div className="screen">
       <div className="calendar">
         <DragAndDropCalendar
-          defaultDate={moment().toDate()}
+          defaultDate={moment()}
           defaultView='month'
           events={events}
           localizer={localizer}
