@@ -8,7 +8,6 @@ import User from '../../models/User';
 dotenv.config()
 
 beforeAll(async () => {
-  console.log(process.env.MONGO_TEST)
   await mongoose.connect(process.env.MONGO_TEST);
 });
 
@@ -30,8 +29,8 @@ describe("Verificar registro e login de usuário", () => {
       .then(response => {
         expect(response.body.message).toEqual("Seja bem-vindo!")
       })
-  })
-
+    })
+    
   it("Verificar se o usuário foi cadastrado", async () => {
     return request(app)
     .post('/auth/register')
@@ -46,5 +45,89 @@ describe("Verificar registro e login de usuário", () => {
       expect(response.body.message).toEqual("Usuário criado com sucesso!")
     })
     })
-    // olhar no db se usuário foi criado
+
+  it("Verificar se todos os campos foram preenchidos", async () => {
+    return request(app)
+    .post('/auth/register')
+    .send({
+      name: '',
+      email: '',
+      password: '',
+    })
+    .expect(422)
+    .then(response => {
+      expect(response.body.message).toEqual("Por favor, preencha todos os campos!")
+    })
+    })
+
+    it("Retornar erro se as senhas não conferirem", async () => {
+      return request(app)
+      .post('/auth/register')
+      .send({
+        name: 'Teste',
+        email: 'test@test.com',
+        password: '12345678',
+        confirmPassword: '123456789'
+      })
+      .expect(422)
+      .then(response => {
+        expect(response.body.message).toEqual("As senhas não conferem, por favor, digite novamente!")
+      })
+      })
+      
+    it("Verificar se o usuário já existe", async () => {
+      await request(app)
+      .post('/auth/register')
+      .send({
+        name: 'Teste',
+        email: 'test@test.com',
+        password: '12345678',
+        confirmPassword: '12345678'
+      })
+
+      return request(app)
+      .post('/auth/register')
+      .send({
+        name: 'Teste',
+        email: 'test@test.com',
+        password: '12345678',
+        confirmPassword: '12345678'
+      })
+      .expect(422)
+      .then(response => {
+        expect(response.body.message).toEqual("Usuário já existe. Por favor, tente outro e-mail!")
+      })
+      })
+
+  })
+
+describe('Login de Usuário', () => {
+  it("Realiza login do usuário já cadastrado", async () => {
+    // const user =  new User({
+    //   name: 'Teste',
+    //   email: 'test@test.com',
+    //   password: await bcrypt.hash('12345678', 12),
+    // })
+    // await user.save()
+    await request(app)
+      .post('/auth/register')
+      .send({
+        name: 'Teste',
+        email: 'test@test.com',
+        password: '12345678',
+        confirmPassword: '12345678'
+      })
+
+    return request(app)
+    .post('/auth/login')
+    .send({
+      email: 'test@test.com',
+      password: '12345678'
+    })
+    .expect(200)
+    .then(response => {
+      expect(response.body).toHaveProperty('token')
+      expect(response.body.message).toEqual("Autenticação realizada com sucesso!")
+    })
+    })
   })
