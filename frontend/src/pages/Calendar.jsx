@@ -31,13 +31,19 @@ function MyCalendar() {
   const moveEvents = async(data) => {
     setLoading(true)
     const { start, end } = data
-    await Promise.all(events.map(async(event) => {
-      if (event.id === data.event.id) {
-        event.start = moment(start)
-        event.end = moment(end)
-        await eventService.update(event)
-      }
-    }));
+    try {
+      await Promise.all(events.map(async(event) => {
+        if (event.id === data.event.id) {
+          event.start = moment(start).toDate()
+          event.end = moment(end).toDate()
+          await eventService.update(event)
+        }
+      }));
+      
+    } catch (error) {
+      alert(error.response?.data?.message)
+      console.error(error)
+    }
     setLoading(false)
   }
   
