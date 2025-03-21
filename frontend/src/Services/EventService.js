@@ -4,13 +4,13 @@ import UserService from './UserService'
 const userService = new UserService()
 
 export default class EventService {
-  constructor () {
+  constructor() {
     this.axios = axios.create({
       baseURL: process.env.REACT_APP_API_LOGIN + '/events'
     })
   }
 
-  async update ({id, title, start, end, description, color, type}) {
+  async update({id, title, start, end, description, color, type}) {
     const accessToken = userService.getUserToken()
     return this.axios.put(`/${id}`, {title, start, end, description, color, type},
     {
@@ -21,7 +21,7 @@ export default class EventService {
   )
   }
 
-  async create ({title, start, end, description, color, type}) {
+  async create({title, start, end, description, color, type}) {
     const accessToken = userService.getUserToken()
     return this.axios.post('/', {title, start, end, description, color, type},
     {
@@ -32,7 +32,7 @@ export default class EventService {
   )
   }
 
-  async list () {
+  async list() {
     const accessToken = userService.getUserToken()
     return this.axios.get('/',
       {
@@ -44,7 +44,7 @@ export default class EventService {
     )
   }
 
-  async delete ({id}) {
+  async delete({id}) {
     const accessToken = userService.getUserToken()
     return this.axios.delete(`/${id}`,
     {
