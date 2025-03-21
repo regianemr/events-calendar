@@ -12,19 +12,19 @@ router.post('/register', async(req, res) => {
   const {name, email, password, confirmPassword} = req.body
 
   // validations
-  if(!name || !email || !password) {
-    return res.status(422).json({ msg: "Por favor, preencha todos os campos!"})
+  if (!name || !email || !password) {
+    return res.status(422).json({ message: "Por favor, preencha todos os campos!"})
   }
 
-  if(password !== confirmPassword) {
-    return res.status(422).json({msg: "As senhas não conferem, por favor, digite novamente!"})
+  if (password !== confirmPassword) {
+    return res.status(422).json({message: "As senhas não conferem, por favor, digite novamente!"})
   }
 
   // check if user exists
   const userExists = await User.findOne({ email })
 
-  if(userExists) {
-    return res.status(422).json({ msg: "Usuário já existe.Por favor, tente outro e-mail!"})
+  if (userExists) {
+    return res.status(422).json({ message: "Usuário já existe. Por favor, tente outro e-mail!"})
   }
 
   // Create password
@@ -40,11 +40,11 @@ router.post('/register', async(req, res) => {
 
   try {
     await user.save()
-    res.status(201).json({msg: "Usuário criado com sucesso!"})
+  res.status(201).json({message: "Usuário criado com sucesso!"})
 
   } catch (error) {
     console.log(error)
-    res.status(500).json({msg: 'Aconteceu um erro no servidor.'})
+    res.status(500).json({message: 'Aconteceu um erro no servidor.'})
   }
 })
 
@@ -54,29 +54,29 @@ router.post("/login", async (req, res) => {
 
   // validations
   if(!email || !password) {
-    return res.status(422).json({ msg: "Por favor, preencha todos os campos!"})
+    return res.status(422).json({ message: "Por favor, preencha todos os campos!"})
   }
 
   // check if user exist
   const user = await User.findOne({ email})
 
   if(!user) {
-    return res.status(404).json({ msg: "Usuário não encontrado!"})
+    return res.status(404).json({ message: "Usuário não encontrado!"})
   }
 
   // check if password match
   const checkPassword = await bcrypt.compare(password, user.password)
   if(!checkPassword) {
-    return res.status(400).json({ msg: "Usuário ou senha inválida!"})
+    return res.status(400).json({ message: "Usuário ou senha inválida!"})
   }
 
   try {
     const secret = process.env.SECRET
     const token = jwt.sign( { id: user._id }, secret, { expiresIn: "7d" })
-    res.status(200).json({ msg: "Autenticação realizada com sucesso!", token })
+    res.status(200).json({ message: "Autenticação realizada com sucesso!", token })
   } catch (error) {
     console.log(error)
-    res.status(500).json({msg: 'Aconteceu um erro no servidor.'})
+    res.status(500).json({message: 'Aconteceu um erro no servidor.'})
   }
 })
 
