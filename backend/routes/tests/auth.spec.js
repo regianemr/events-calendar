@@ -103,12 +103,7 @@ describe("Verificar registro e login de usuário", () => {
 
 describe('Login de Usuário', () => {
   it("Realiza login do usuário já cadastrado", async () => {
-    // const user =  new User({
-    //   name: 'Teste',
-    //   email: 'test@test.com',
-    //   password: await bcrypt.hash('12345678', 12),
-    // })
-    // await user.save()
+   
     await request(app)
       .post('/auth/register')
       .send({
